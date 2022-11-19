@@ -1,0 +1,100 @@
+---
+title: "Subsetting"
+author: "AnindyaK"
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+Quiz:
+4.2.6
+Q3: When should you use drop = FALSE?
+```{r}
+#By default, subsetting a matrix or data frame with a single number, a single name, or a logical vector containing a single TRUE, will simplify the returned output, i.e. it will return an object with lower dimensionality. To preserve the original dimensionality, you must use drop = FALSE.
+
+a <- matrix(1:4, nrow = 2)
+str(a[1, ])
+
+str(a[1, , drop = FALSE])
+
+df <- data.frame(a = 1:2, b = 1:2)
+str(df[, "a"])
+
+str(df[,"a", drop = FALSE])
+
+#When writing functions, get in the habit of always using drop = FALSE when subsetting a 2D object. For this reason, tibbles default to drop = FALSE, and [ always returns another tibble.
+```
+
+Q1:Fix each of the following common data frame subsetting errors:
+mtcars[mtcars$cyl = 4, ]
+mtcars[-1:4, ]
+mtcars[mtcars$cyl <= 5]
+mtcars[mtcars$cyl == 4 | 6, ]
+
+```{r}
+mt <- mtcars[mtcars$cyl == 4,] #replacing = with == will solve the problem
+
+mtcars[-(1:4), ] #plus and minus can not be used at the same time but putting them in a bracket then select the rows 4 
+
+mtcars[mtcars$cyl <= 5,] # the , was missing 
+
+mtcars[mtcars$cyl == 4:6, ]
+mtcars[mtcars$cyl == 6, ]
+mtcars[mtcars$cyl %in% c(4, 6),]
+#%in% means contain
+```
+
+Q2: Why does the following code yield five missing values? (Hint: why is it different from x[NA_real_]?)
+x <- 1:5
+x[NA]
+#> [1] NA NA NA NA NA
+
+```{r}
+x <- 1:5
+#NA is logical and any logical vector is recycled to the same length as the vector being subset which resulted in x[NA] becoming [1] NA NA NA NA NA
+```
+
+Q3: What does upper.tri() return? How does subsetting a matrix with it work? Do we need any additional subsetting rules to describe its behaviour?
+
+x <- outer(1:5, 1:5, FUN = "*")
+x[upper.tri(x)]
+
+```{r}
+x <- outer(1:5, 1:5, FUN = "*")
+upper.tri(x)
+x[upper.tri(x)]
+```
+
+Q4: Why does mtcars[1:20] return an error? How does it differ from the similar mtcars[1:20, ]?
+```{r}
+mtcars[1:20,] # without the , it didn't work because the matrix has only 11 columns
+```
+
+Q5: Implement your own function that extracts the diagonal entries from a matrix (it should behave like diag(x) where x is a matrix).
+```{r}
+diag2 <- function(x) {
+  n <- min(nrow(x), ncol(x))
+  idx <- cbind(seq_len(n), seq_len(n))
+  x[idx]
+}
+(x <- matrix(1:30, 5))
+diag(x)
+```
+Q6:What does df[is.na(df)] <- 0 do? How does it work?
+```{r}
+#in the matrix df the  NA is replaced by 0
+```
+
+
+
