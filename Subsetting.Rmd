@@ -93,7 +93,7 @@ diag(x)
 ```
 Q6:What does df[is.na(df)] <- 0 do? How does it work?
 ```{r}
-#in the matrix df the  NA is replaced by 0
+#in the matrix df the NA is replaced by 0
 ```
 
 
